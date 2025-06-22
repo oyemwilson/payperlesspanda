@@ -1,0 +1,40 @@
+/* 
+.bg-overlay{
+
+    opacity: 0.2;
+
+
+    
+}
+.contain{
+    background-color: transparent;
+    background-image: radial-gradient(at top right, #A2FFA045 0%, #1570EF00 60%);
+}
+.home-text{
+
+}
+.overlay{
+
+    background-image: radial-gradient(at center center, #115b355f 0%, #0C0C0D00 75%);
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: ;
+}
+img{
+        position: relative;
+    z-index: 20;
+} */
+
+.no-scroll {
+    overflow: hidden;
+  }
+
+  body.no-scroll {
+    overflow: hidden;
+  }
+
