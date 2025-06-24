@@ -1,6 +1,9 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
+
+
 
 const navigation = [
     { name: 'Home', href: '#', current: true },
@@ -90,20 +93,21 @@ const Topnav = () => {
 
                             {/* Desktop buttons */}
                             <div className="hidden md:flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                                <button
+                                {/* <button
                                     type="button"
                                     className="relative mr-5 rounded px-3 py-2 text-green-400 hover:text-white"
                                 >
                                     <span className="sr-only">View notifications</span>
                                     <a href="#">Login</a>
-                                </button>
-                                <button
-                                    type="button"
-                                    className="relative rounded bg-green-400 px-3 py-2 text-white hover:text-white"
-                                >
-                                    <span className="sr-only">View notifications</span>
-                                    <a href="#">Get Started</a>
-                                </button>
+                                </button> */}
+     <button
+  type="button"
+  className="relative rounded bg-green-400 px-3 py-2 text-white hover:text-white"
+>
+  <span className="sr-only">View notifications</span>
+  <Link to="/receipt">Get Started</Link>
+</button>
+
                             </div>
                         </div>
                     </div>
@@ -143,13 +147,13 @@ const Topnav = () => {
                                 ))}
                             </div>
                             <div className="flex flex-col bottom-20 absolute w-full items-center px-2 pb-3">
-                                <button
+                                {/* <button
                                     type="button"
                                     className="relative mb-3 rounded px-3 py-2 text-green-400 hover:text-white w-full text-center"
                                 >
                                     <span className="sr-only">View notifications</span>
                                     <a href="#">Login</a>
-                                </button>
+                                </button> */}
                                 <button
                                     type="button"
                                     className="relative rounded bg-green-400 px-3 py-2 text-white hover:text-white w-full text-center"
