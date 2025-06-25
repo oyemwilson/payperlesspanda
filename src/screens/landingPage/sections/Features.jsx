@@ -18,35 +18,35 @@ const Features = () => {
                         <div className="lg:w-1/2 text-center lg:text-left order-2 lg:order-1" data-aos="fade-right"  data-aos-duration="1000"
                                         data-aos-delay="200" >
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl  font-extrabold tracking-tight">
-                                Professional Invoice Templates
+                                Online Receipt Maker
                             </h1>
                             <p className="mt-4 text-base sm:text-lg lg:text-xl w-full sm:w-4/5 lg:w-3/4 mx-auto lg:mx-0 text-gray-300">
-                                Looking to send an invoice right now? Use our online invoice generator or one of our downloadable, printable, and fully customizable invoice templates!
+                                Generate Receipts Instantly with Ease, Wherever and Whenever You Need Them
                             </p>
                             <ul className="mt-6 space-y-3 text-sm sm:text-base lg:text-lg ">
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Online invoice generator for quick and easy invoicing
+                                   Quickly enter payment and client details
                                 </li>
-                                <li className="flex items-center justify-center lg:justify-start">
+                                {/* <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
                                     Downloadable templates for offline use
+                                </li> */}
+                                <li className="flex items-center justify-center lg:justify-start">
+                                    <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                    </svg>
+                                 Get a professionally formatted receipt in seconds
                                 </li>
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Printable designs for professional presentation
-                                </li>
-                                <li className="flex items-center justify-center lg:justify-start">
-                                    <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                    </svg>
-                                    Fully customizable to match your brand
+                                  Download or print directly — no signup required
                                 </li>
                             </ul>
                         </div>
@@ -124,29 +124,29 @@ const Features = () => {
                         <div className="lg:w-1/2 text-center lg:text-left order-2 lg:order-0"  data-aos="fade-left"  data-aos-duration="1000"
                                         data-aos-delay="200">
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
-                                Online Receipt Maker
+                                 Fast & Easy
                             </h1>
                             <p className="mt-4 text-base sm:text-lg lg:text-xl w-full sm:w-4/5 lg:w-3/4 mx-auto lg:mx-0 text-gray-300">
-                                Once you’ve received payment, you can easily create a receipt using our receipt maker. Simply reuse all the details from your invoice or quote to generate the receipt in seconds and send it to your clients.
+                                Simplify Your Workflow with a Seamless, Hassle-Free Receipt Creation Experience
                             </p>
                             <ul className="mt-6 space-y-3 text-sm sm:text-base lg:text-lg">
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Create receipts quickly and easily
+                                    Reuse transaction details to generate receipts fast
                                 </li>
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Reuse invoice or quote details
+                                    Save time with a clear, simple process
                                 </li>
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Send receipts to clients instantly
+                                    No need for special software or accounts
                                 </li>
                             </ul>
                         </div>
@@ -165,29 +165,29 @@ const Features = () => {
                         <div className="lg:w-1/2 text-center lg:text-left order-2 lg:order-1" data-aos="fade-right"  data-aos-duration="1000"
                                         data-aos-delay="200">
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
-                                Track Revenue & Simplify Billing
+                                 Professional Templates
                             </h1>
                             <p className="mt-4 text-base sm:text-lg lg:text-xl w-full sm:w-4/5 lg:w-3/4 mx-auto lg:mx-0 text-gray-300">
-                                Gain clear insight into your finances with powerful tools designed to make billing easier and more efficient.
+                                Clean, Customizable Designs That Help You Present Every Transaction Professionally
                             </p>
                             <ul className="mt-6 space-y-3 text-sm sm:text-base lg:text-lg">
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Access detailed financial reports for better clarity
+                                    Modern layouts that suit any business
                                 </li>
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Set up recurring payments to automate billing
+                                    Personalize with your company name and logo
                                 </li>
                                 <li className="flex items-center justify-center lg:justify-start">
                                     <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                     </svg>
-                                    Manage retainers smoothly with streamlined controls
+                                    Ready to download as a PDF or print
                                 </li>
                             </ul>
                         </div>

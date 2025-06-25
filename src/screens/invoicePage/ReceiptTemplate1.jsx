@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, Trash2, Download, Upload, Receipt, Building, User, Phone, MapPin, Calendar, Hash } from 'lucide-react';
+import { Plus, Trash2, Download, Upload, Receipt, Building, User, Phone, MapPin, Calendar, Hash, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ReceiptTemplate = () => {
   const [logo, setLogo] = useState(null);
@@ -19,6 +20,8 @@ const ReceiptTemplate = () => {
   const [thankYouMessage, setThankYouMessage] = useState('Thank you for choosing us!');
   const [notes, setNotes] = useState('');
   const [librariesLoaded, setLibrariesLoaded] = useState(false);
+  const [currency, setCurrency] = useState('USD');
+  const [receiptColor, setReceiptColor] = useState('#ffffff');
 
   const receiptRef = useRef(null);
 
@@ -31,7 +34,7 @@ const ReceiptTemplate = () => {
           const html2canvasScript = document.createElement('script');
           html2canvasScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
           document.head.appendChild(html2canvasScript);
-          
+
           await new Promise((resolve) => {
             html2canvasScript.onload = resolve;
           });
@@ -42,7 +45,7 @@ const ReceiptTemplate = () => {
           const jsPDFScript = document.createElement('script');
           jsPDFScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
           document.head.appendChild(jsPDFScript);
-          
+
           await new Promise((resolve) => {
             jsPDFScript.onload = resolve;
           });
@@ -58,12 +61,12 @@ const ReceiptTemplate = () => {
   }, []);
 
   const addItem = () => {
-    setItems([...items, { 
-      id: Date.now(), 
-      name: '', 
+    setItems([...items, {
+      id: Date.now(),
+      name: '',
       description: '',
-      quantity: 1, 
-      price: 0 
+      quantity: 1,
+      price: 0
     }]);
   };
 
@@ -80,11 +83,11 @@ const ReceiptTemplate = () => {
     setItems(items.map(item =>
       item.id === id
         ? {
-            ...item,
-            [field]: field === 'quantity' || field === 'price'
-              ? parseFloat(value) || 0
-              : value
-          }
+          ...item,
+          [field]: field === 'quantity' || field === 'price'
+            ? parseFloat(value) || 0
+            : value
+        }
         : item
     ));
   };
@@ -104,7 +107,6 @@ const ReceiptTemplate = () => {
       alert('PDF libraries are still loading. Please try again in a moment.');
       return;
     }
-
     const receiptElement = receiptRef.current;
     if (!receiptElement) return;
 
@@ -112,37 +114,99 @@ const ReceiptTemplate = () => {
     const editPanel = document.querySelector('.bg-slate-50.border-t');
     const headerElement = document.querySelector('.text-center.mb-8');
     const buttons = receiptElement.querySelectorAll('.no-print');
-    
-    const originalStyles = [];
+    const hiddenElementsOriginalStyles = [];
+
     [editPanel, headerElement, ...buttons].forEach((el, index) => {
       if (el) {
-        originalStyles[index] = el.style.display;
+        hiddenElementsOriginalStyles[index] = el.style.display;
         el.style.display = 'none';
       }
     });
 
+    // Force desktop layout for consistent PDF output
+    const originalStyles = {
+      minHeight: receiptElement.style.minHeight,
+      height: receiptElement.style.height,
+      width: receiptElement.style.width,
+      maxWidth: receiptElement.style.maxWidth,
+      transform: receiptElement.style.transform,
+      position: receiptElement.style.position
+    };
+
+    // Apply desktop-width styles temporarily
+    receiptElement.style.minHeight = 'auto';
+    receiptElement.style.height = 'auto';
+    receiptElement.style.width = '1024px'; // Fixed desktop width
+    receiptElement.style.maxWidth = '1024px';
+    receiptElement.style.transform = 'scale(1)';
+    receiptElement.style.position = 'relative';
+
+    // Wait for any potential layout shifts
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     try {
-      const canvas = await window.html2canvas(receiptElement, { 
+      // Get the actual rendered dimensions
+      const rect = receiptElement.getBoundingClientRect();
+      const scrollHeight = receiptElement.scrollHeight;
+      const actualHeight = Math.max(rect.height, scrollHeight);
+
+      const canvas = await window.html2canvas(receiptElement, {
         scale: 2,
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        backgroundColor: null,
+        scrollX: 0,
+        scrollY: 0,
+        width: 1024, // Fixed width for consistency
+        height: actualHeight,
+        windowWidth: 1024, // Simulate desktop viewport
+        windowHeight: actualHeight
       });
+
       const imgData = canvas.toDataURL('image/png');
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'pt', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`receipt-${receiptNumber || Date.now()}.pdf`);
+      // Calculate dimensions to fit content exactly
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      // Convert pixels to points (1 pixel = 0.75 points)
+      const pdfWidth = imgWidth * 0.75;
+      const pdfHeight = imgHeight * 0.75;
+
+      // Ensure minimum PDF dimensions (prevent too small PDFs)
+      const minWidth = 400;
+      const minHeight = 500;
+      const finalWidth = Math.max(pdfWidth, minWidth);
+      const finalHeight = Math.max(pdfHeight, minHeight);
+
+      // Create PDF with custom dimensions that match your content
+      const pdf = new jsPDF({
+        orientation: finalWidth > finalHeight ? 'landscape' : 'portrait',
+        unit: 'pt',
+        format: [finalWidth, finalHeight]
+      });
+
+      // Center the image if PDF is larger than content
+      const xOffset = (finalWidth - pdfWidth) / 2;
+      const yOffset = (finalHeight - pdfHeight) / 2;
+
+      // Add image to PDF
+      pdf.addImage(imgData, 'PNG', xOffset, yOffset, pdfWidth, pdfHeight);
+      pdf.save(`invoice-${receiptNumber || Date.now()}.pdf`);
+
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Error generating PDF. Please try again.');
     } finally {
-      // Restore original display styles
+      // Restore all original styles
+      Object.keys(originalStyles).forEach(key => {
+        receiptElement.style[key] = originalStyles[key];
+      });
+
       [editPanel, headerElement, ...buttons].forEach((el, index) => {
         if (el) {
-          el.style.display = originalStyles[index] || '';
+          el.style.display = hiddenElementsOriginalStyles[index] || '';
         }
       });
     }
@@ -151,30 +215,41 @@ const ReceiptTemplate = () => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: currency
     }).format(amount);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div className="min-h-screen bg-green-950 from-slate-50 to-slate-100 p-4">
+      <div>
+        <Link to="/select-design" className="inline-flex items-center p-2 text-white hover:text-green-900 border-2 border-white hover:border-green-900 rounded-full mt-10 ml-5">
+          <ArrowLeft className="w-6 h-6" />
+        </Link>
+      </div>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">Receipt Generator</h1>
-          <p className="text-slate-600">Create professional receipts with ease</p>
+        <div className="text-center mb-8 mt-10">
+          <h1 className="text-3xl font-bold text-white mb-2">Invoice Generator</h1>
+          <p className="text-white">Create professional Invoice with ease</p>
+        </div>
+        {/* Floating elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 left-10 w-20 h-20 bg-gradient-to-br from-amber-200 to-orange-300 rounded-full opacity-20 animate-pulse"></div>
+          <div className="absolute top-32 right-20 w-16 h-16 bg-gradient-to-br from-red-200 to-pink-300 rounded-full opacity-15 animate-pulse delay-1000"></div>
+          <div className="absolute bottom-20 left-32 w-12 h-12 bg-gradient-to-br from-orange-200 to-red-200 rounded-full opacity-25 animate-pulse delay-500"></div>
         </div>
 
         {/* Main Content */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Receipt Preview */}
           <div ref={receiptRef} className="receipt-content">
-            <div className="bg-white p-8 max-w-2xl mx-auto">
+            <div className="bg-white p-8 max-w-5xl mx-auto">
               {/* Company Header */}
               <div className="border-b-2 border-slate-200 pb-6 mb-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     {logo ? (
-                      <img src={logo} alt="Company Logo" className="h-16 w-auto mb-4" />
+                      <img src={logo} alt="Company Logo" className="h-[200px] w-auto mb-4" />
                     ) : (
                       <div className="h-16 w-16 bg-slate-100 rounded-lg flex items-center justify-center mb-4">
                         <Building className="h-8 w-8 text-slate-400" />
@@ -188,8 +263,8 @@ const ReceiptTemplate = () => {
                   </div>
                   <div className="text-right">
                     <div className="bg-slate-50 px-4 py-2 rounded-lg">
-                      <p className="text-sm text-slate-500 mb-1">Receipt #</p>
-                      <p className="font-mono font-semibold">{receiptNumber || 'REC-001'}</p>
+                      <p className="text-sm text-slate-500 mb-1">Invoice #</p>
+                      <p className="font-mono font-semibold">{receiptNumber || 'INV-001'}</p>
                     </div>
                     <div className="mt-3 bg-slate-50 px-4 py-2 rounded-lg">
                       <p className="text-sm text-slate-500 mb-1">Date</p>
@@ -299,8 +374,8 @@ const ReceiptTemplate = () => {
           {/* Edit Panel */}
           <div className="bg-slate-50 border-t p-6 ">
             <div className="max-w-4xl mx-auto ">
-              <h2 className="text-xl font-semibold mb-6 text-slate-800">Edit Receipt</h2>
-              
+              <h2 className="text-xl font-semibold mb-6 text-slate-800">Edit Invoice</h2>
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Company Information */}
                 <div className="space-y-4">
@@ -308,7 +383,7 @@ const ReceiptTemplate = () => {
                     <Building className="h-4 w-4 mr-2" />
                     Company Information
                   </h3>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Company Logo
@@ -376,18 +451,18 @@ const ReceiptTemplate = () => {
                 <div className="space-y-4">
                   <h3 className="font-semibold text-slate-700 flex items-center">
                     <Receipt className="h-4 w-4 mr-2" />
-                    Receipt Details
+                    Invoice Details
                   </h3>
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Receipt Number
+                      Invoice Number
                     </label>
                     <input
                       type="text"
                       value={receiptNumber}
                       onChange={(e) => setReceiptNumber(e.target.value)}
-                      placeholder="REC-001"
+                      placeholder="INV-001"
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                     />
                   </div>
@@ -442,13 +517,31 @@ const ReceiptTemplate = () => {
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Currency
+                    </label>
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    >
+                      <option value="USD">USD - US Dollar</option>
+                      <option value="EUR">EUR - Euro</option>
+                      <option value="GBP">GBP - British Pound</option>
+                      <option value="JPY">JPY - Japanese Yen</option>
+                      <option value="CAD">CAD - Canadian Dollar</option>
+                      <option value="NGN">N - Nigerian Naira</option>
+                    </select>
+                  </div>
                 </div>
               </div>
+
 
               {/* Items Section */}
               <div className="mt-8">
                 <h3 className="font-semibold text-slate-700 mb-4">Items</h3>
-                
+
                 <div className="space-y-3">
                   {items.map((item, index) => (
                     <div key={item.id} className="bg-white p-4 rounded-lg border border-slate-200">
@@ -595,11 +688,10 @@ const ReceiptTemplate = () => {
                 <button
                   onClick={downloadReceipt}
                   disabled={!librariesLoaded}
-                  className={`px-6 py-3 rounded-lg transition-colors flex items-center mx-auto shadow-lg ${
-                    librariesLoaded 
-                      ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer' 
-                      : 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                  }`}
+                  className={`px-6 py-3 rounded-lg transition-colors flex items-center mx-auto shadow-lg ${librariesLoaded
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
+                    : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                    }`}
                 >
                   <Download className="h-5 w-5 mr-2" />
                   {librariesLoaded ? 'Download PDF' : 'Loading PDF Libraries...'}

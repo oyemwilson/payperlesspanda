@@ -7,9 +7,9 @@ import { Link } from "react-router-dom";
 
 const navigation = [
     { name: 'Home', href: '#', current: true },
+    { name: 'Why us', href: '#', current: false },
     { name: 'Solutions', href: '#', current: false },
-    { name: 'Testimonials', href: '#', current: false },
-    { name: 'Pricing', href: '#', current: false },
+    { name: 'Faq', href: '#', current: false },
 ];
 
 function classNames(...classes) {
@@ -105,7 +105,7 @@ const Topnav = () => {
   className="relative rounded bg-green-400 px-3 py-2 text-white hover:text-white"
 >
   <span className="sr-only">View notifications</span>
-  <Link to="/receipt">Get Started</Link>
+  <Link to="/select-design">Create Invoice</Link>
 </button>
 
                             </div>
@@ -159,7 +159,7 @@ const Topnav = () => {
                                     className="relative rounded bg-green-400 px-3 py-2 text-white hover:text-white w-full text-center"
                                 >
                                     <span className="sr-only">View notifications</span>
-                                    <a href="#">Get Started</a>
+                                      <Link to="/select-design">Create Invoice</Link>
                                 </button>
                             </div>
                         </DisclosurePanel>

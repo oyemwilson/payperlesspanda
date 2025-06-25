@@ -17,7 +17,7 @@ const Footer = () => {
                             </span>
                         </a>
                     </div>
-                    <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                    {/* <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-100 uppercase dark:text-white">
                                 Resources
@@ -75,7 +75,7 @@ const Footer = () => {
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
                 <div className="sm:flex sm:items-center sm:justify-between">

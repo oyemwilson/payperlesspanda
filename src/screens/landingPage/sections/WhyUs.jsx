@@ -15,8 +15,8 @@ const WhyUs = () => {
             <div className="contain  text-center w-[100%]">
                 <div className="text-white mx-auto" >
                     <p className='text-green-400 mb-5'>Why Payperless Panda?</p>
-                    <h1 className='w-[80%] md:w-[50%] text-4xl mx-auto md:text-6xl font-black'>Create professional estimates and invoices on the go</h1>
-                    <p className='md:w-[60%] w-[90%] mx-auto mt-5'>our business thrives on estimates and invoices—they win jobs and bring in payments. Payperless Panda lets you craft elegant estimates and invoices in seconds. It's truly as easy as tap, type, and go.</p>
+                    <h1 className='w-[80%] md:w-[50%] text-4xl mx-auto md:text-6xl font-black'>Streamline billing, enhance cash flow, and manage invoices effectively.</h1>
+                    <p className='md:w-[60%] w-[90%] mx-auto mt-5'>our business thrives on invoices—they win jobs and bring in payments. Payperless Panda lets you craft elegant estimates and invoices in seconds. It's truly as easy as tap, type, and go.</p>
                     <p className='md:w-[60%] w-[90%] mx-auto'>No matter where business takes you, Payperless Panda is your simplest solution for all your small business estimating and invoicing needs.</p>
                 </div>
             </div>
@@ -46,11 +46,10 @@ const WhyUs = () => {
                         <div className="text-gray-600 text-center">
                             <i className="fa-regular fa-circle-user fa-2x mb-5 text-green-400"></i>
                             <p className="text-xl text-white font-extrabold mb-5">
-                                Get Started Fast
+                                Fill Out the Invoice
                             </p>
-                            <p>1. Create free account</p>
-                            <p>2. Confirm your email</p>
-                            <p>3. Lgin and customize</p>
+                            <p>1. Enter client information</p>
+                            <p>2. Add products, rates, and totals</p>
                         </div>
                     </div>
                     <div className="flex relative w-64 h-80 bg-wite items-center justify-center" data-aos="flip-right"  data-aos-duration="1000"
@@ -80,7 +79,6 @@ const WhyUs = () => {
                                 Make it Yours
                             </p>
                             <p>1. Upload your logo</p>
-                            <p>2. Enter company info</p>
                             <p>3. Explore template designs</p>
                         </div>
                     </div>
@@ -108,11 +106,10 @@ const WhyUs = () => {
                         <div className="text-gray-600 text-center">
                             <i className="fa-regular fa-circle-user fa-2x mb-5 text-green-400"></i>
                             <p className="text-xl text-white font-extrabold mb-5">
-                                Master Your Finances
+                                Preview
                             </p>
-                            <p>1. Categorize expenses</p>
-                            <p>2. generate reports</p>
-                            <p>3. track your cash flow</p>
+                            <p>1. Review layout & details</p>
+                            <p>2. Make quick edits before you’re done</p>
                         </div>
                     </div>
                     <div className="flex relative w-64 h-80 bg-wite items-center justify-center" data-aos="flip-left"  data-aos-duration="1000"
@@ -139,11 +136,10 @@ const WhyUs = () => {
                         <div className="text-gray-600 text-center">
                             <i className="fa-regular fa-circle-user fa-2x mb-5 text-green-400"></i>
                             <p className="text-xl text-white font-extrabold mb-5">
-                                Create & Send Receipts
+                                Download & Share
                             </p>
-                            <p>1. Generate professional receiptst</p>
-                            <p>2. organized record-keeping</p>
-                            <p>3. keep tabs on all your expenses</p>
+                            <p>1. Download as PDF file</p>
+                            <p>2. Print or email directly to clients</p>
                         </div>
                     </div>
 
