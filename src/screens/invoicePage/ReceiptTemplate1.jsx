@@ -277,7 +277,7 @@ const ReceiptTemplate = () => {
               {/* Customer Information */}
               <div className="mb-6">
                 <h2 className="text-lg font-semibold text-slate-800 mb-3 flex items-center">
-                  <User className="h-5 w-5 mr-2" />
+                  {/* <User className="h-5 w-5 mr-2" /> */}
                   Bill To
                 </h2>
                 <div className="bg-slate-50 p-4 rounded-lg">

@@ -102,115 +102,96 @@ const ReceiptTemplate4 = () => {
     const taxAmount = (taxableAmount * taxRate) / 100;
     const total = taxableAmount + taxAmount;
 
-    const downloadReceipt = async () => {
-        if (!librariesLoaded) {
-            alert('PDF libraries are still loading. Please try again in a moment.');
-            return;
-        }
-        const receiptElement = receiptRef.current;
-        if (!receiptElement) return;
+   const downloadReceipt = async () => {
+    if (!librariesLoaded) {
+        alert('PDF libraries are still loading. Please try again in a moment.');
+        return;
+    }
 
-        // Hide edit panel and other non-print elements
-        const editPanel = document.querySelector('.bg-slate-50.border-t');
-        const headerElement = document.querySelector('.text-center.mb-8');
-        const buttons = receiptElement.querySelectorAll('.no-print');
-        const hiddenElementsOriginalStyles = [];
+    const receiptElement = receiptRef.current;
+    if (!receiptElement) return;
 
-        [editPanel, headerElement, ...buttons].forEach((el, index) => {
-            if (el) {
-                hiddenElementsOriginalStyles[index] = el.style.display;
-                el.style.display = 'none';
-            }
-        });
+    // Hide non-print elements
+    const elementsToHide = [
+        document.querySelector('.bg-slate-50.border-t'),
+        document.querySelector('.text-center.mb-8'),
+        ...receiptElement.querySelectorAll('.no-print')
+    ];
 
-        // Force desktop layout for consistent PDF output
-        const originalStyles = {
-            minHeight: receiptElement.style.minHeight,
-            height: receiptElement.style.height,
-            width: receiptElement.style.width,
-            maxWidth: receiptElement.style.maxWidth,
-            transform: receiptElement.style.transform,
-            position: receiptElement.style.position
-        };
+    const originalDisplays = elementsToHide.map(el => 
+        el ? { element: el, display: el.style.display } : null
+    ).filter(Boolean);
 
-        // Apply desktop-width styles temporarily
-        receiptElement.style.minHeight = 'auto';
-        receiptElement.style.height = 'auto';
-        receiptElement.style.width = '1024px'; // Fixed desktop width
-        receiptElement.style.maxWidth = '1024px';
-        receiptElement.style.transform = 'scale(1)';
-        receiptElement.style.position = 'relative';
+    originalDisplays.forEach(({ element }) => {
+        element.style.display = 'none';
+    });
 
-        // Wait for any potential layout shifts
+    // Store ALL computed styles before changes
+    const computedStyle = window.getComputedStyle(receiptElement);
+    const originalStyles = {};
+    for (let property of computedStyle) {
+        originalStyles[property] = receiptElement.style[property] || '';
+    }
+
+    try {
+        // Force desktop layout for PDF
+        receiptElement.style.cssText = `
+            width: 1024px !important;
+            max-width: 1024px !important;
+            min-width: 1024px !important;
+            box-sizing: border-box !important;
+            transform: none !important;
+            position: relative !important;
+            margin: 0 !important;
+        `;
+
+        // Wait for layout changes
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        try {
-            // Get the actual rendered dimensions
-            const rect = receiptElement.getBoundingClientRect();
-            const scrollHeight = receiptElement.scrollHeight;
-            const actualHeight = Math.max(rect.height, scrollHeight);
+        const canvas = await window.html2canvas(receiptElement, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            width: 1024,
+            windowWidth: 1024,
+            scrollX: 0,
+            scrollY: 0
+        });
 
-            const canvas = await window.html2canvas(receiptElement, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: null,
-                scrollX: 0,
-                scrollY: 0,
-                width: 1024, // Fixed width for consistency
-                height: actualHeight,
-                windowWidth: 1024, // Simulate desktop viewport
-                windowHeight: actualHeight
-            });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
 
-            const imgData = canvas.toDataURL('image/png');
-            const { jsPDF } = window.jspdf;
+        const pdfWidth = Math.max(canvas.width * 0.75, 400);
+        const pdfHeight = Math.max(canvas.height * 0.75, 500);
 
-            // Calculate dimensions to fit content exactly
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
+        const pdf = new jsPDF({
+            orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+            unit: 'pt',
+            format: [pdfWidth, pdfHeight]
+        });
 
-            // Convert pixels to points (1 pixel = 0.75 points)
-            const pdfWidth = imgWidth * 0.75;
-            const pdfHeight = imgHeight * 0.75;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`invoice-${receiptNumber || Date.now()}.pdf`);
 
-            // Ensure minimum PDF dimensions (prevent too small PDFs)
-            const minWidth = 400;
-            const minHeight = 500;
-            const finalWidth = Math.max(pdfWidth, minWidth);
-            const finalHeight = Math.max(pdfHeight, minHeight);
-
-            // Create PDF with custom dimensions that match your content
-            const pdf = new jsPDF({
-                orientation: finalWidth > finalHeight ? 'landscape' : 'portrait',
-                unit: 'pt',
-                format: [finalWidth, finalHeight]
-            });
-
-            // Center the image if PDF is larger than content
-            const xOffset = (finalWidth - pdfWidth) / 2;
-            const yOffset = (finalHeight - pdfHeight) / 2;
-
-            // Add image to PDF
-            pdf.addImage(imgData, 'PNG', xOffset, yOffset, pdfWidth, pdfHeight);
-            pdf.save(`invoice-${receiptNumber || Date.now()}.pdf`);
-
-        } catch (error) {
-            console.error('Error generating PDF:', error);
-            alert('Error generating PDF. Please try again.');
-        } finally {
-            // Restore all original styles
-            Object.keys(originalStyles).forEach(key => {
-                receiptElement.style[key] = originalStyles[key];
-            });
-
-            [editPanel, headerElement, ...buttons].forEach((el, index) => {
-                if (el) {
-                    el.style.display = hiddenElementsOriginalStyles[index] || '';
-                }
-            });
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        alert('Error generating PDF. Please try again.');
+    } finally {
+        // Restore ALL original styles completely
+        receiptElement.style.cssText = '';
+        for (let property in originalStyles) {
+            if (originalStyles[property]) {
+                receiptElement.style[property] = originalStyles[property];
+            }
         }
-    };
+
+        // Restore hidden elements
+        originalDisplays.forEach(({ element, display }) => {
+            element.style.display = display;
+        });
+    }
+};
 
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('en-US', {
@@ -267,13 +248,13 @@ const ReceiptTemplate4 = () => {
                                             <div className="space-y-2">
                                                 {companyAddress && (
                                                     <p className="text-slate-600 flex items-center">
-                                                        <span className="w-2 h-2 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full mr-3"></span>
+                                                        {/* <span className="w-2 h-2 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full mr-3"></span> */}
                                                         {companyAddress}
                                                     </p>
                                                 )}
                                                 {companyPhone && (
                                                     <p className="text-slate-600 flex items-center">
-                                                        <span className="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-500 rounded-full mr-3"></span>
+                                                        {/* <span className="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-500 rounded-full mr-3"></span> */}
                                                         {companyPhone}
                                                     </p>
                                                 )}
@@ -312,8 +293,8 @@ const ReceiptTemplate4 = () => {
                                 {/* Items Card */}
                                 <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300">
                                     <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center">
-                                        <span className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
-                                            <span className="text-white font-bold text-sm">$</span>
+                                        <span className="w-8 h-8  rounded-xl flex items-center justify-center mr-4">
+                                            <span className="text-emerald-400 font-bold text-sm">$</span>
                                         </span>
                                         Invoice Items
                                     </h2>
@@ -332,7 +313,7 @@ const ReceiptTemplate4 = () => {
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex-1 ">
                                                             <div className="flex items-center mb-2">
-                                                                <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mr-3"></div>
+                                                                <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-500 opacity-0 rounded-full mr-3"></div>
                                                                 <h3 className="text-lg font-semibold text-slate-800">{item.name || 'Item Name'}</h3>
                                                             </div>
                                                             {item.description && (

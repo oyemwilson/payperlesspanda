@@ -256,7 +256,7 @@ const ReceiptTemplate3 = () => {
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
                                         {logo ? (
-                                            <img src={logo} alt="Company Logo" className="h-[100px]  w-auto mb-6  invert" />
+                                            <img src={logo} alt="Company Logo" className="h-[100px]  w-auto mb-6  " />
                                         ) : (
                                             <div className="h-16 w-16 bg-emerald-400 rounded-none flex items-center justify-center mb-6 transform rotate-">
                                                 <Building className="h-8 w-8 text-slate-900" />
@@ -288,7 +288,7 @@ const ReceiptTemplate3 = () => {
                                 <div className="flex items-center mb-6">
                                     <div className="w-8 h-0.5 bg-emerald-400 mr-4"></div>
                                     <h2 className="text-xs uppercase tracking-[4px] text-slate-400 flex items-center">
-                                        <User className="h-3 w-3 mr-3" />
+                                        {/* <User className="h-3 w-3 mr-3" /> */}
                                         Client Details
                                     </h2>
                                 </div>
