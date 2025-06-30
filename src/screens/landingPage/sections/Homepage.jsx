@@ -64,13 +64,13 @@ const Homepage = () => {
                                     data-aos-delay="300">The unified platform for Creating Invoices Instantly</h1>
                                 <p className='mt-5 md:w-[30%] w-[80%] mx-auto' data-aos="zoom-in-up" data-aos-duration="1000"
                                     data-aos-delay="400">At Payperless Panda, we understand the importance of staying ahead in the fast-paced world of Business.</p>
-                                    <div className='md:mt-10 mt-5'>
+                                    <div className='md:mt-10 mt-5'                                     data-aos="zoom-in-up"
+                                    data-aos-duration="1000"
+                                    data-aos-delay="500">
                                 <Link
                                     to="/select-design"
                                     className="border border-green-400 rounded-xl bg-black text-white px-6 py-2 hover:bg-green-400  text-xl"
-                                    data-aos="zoom-in-up"
-                                    data-aos-duration="1000"
-                                    data-aos-delay="500"
+
                                 >
                                     Get Started
                                 </Link>
